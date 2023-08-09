@@ -13,7 +13,7 @@ class FileStorage:
     :file_path: : string - path to the JSON file (ex: file.json )
     :objects: dictionary - empty but will store all objects by <class name>.id
     """
-    __file_path = 'saved_object.json'
+    __file_path = './saved_object.json'
     __objects = {}
 
     def all(self):
@@ -58,7 +58,7 @@ class FileStorage:
         :return:no return
         """
         from models.engine.available_class import FileUtil
-
+        my_classes = FileUtil.my_Classes
         try:
             with open(FileStorage.__file_path) as fp:
                 stored_data = json.load(fp)

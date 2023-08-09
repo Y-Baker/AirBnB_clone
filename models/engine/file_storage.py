@@ -5,6 +5,7 @@ for saving project classes
 """
 import json
 import os
+from json import JSONDecoder
 
 
 class FileStorage:
@@ -60,11 +61,12 @@ class FileStorage:
         from models.engine.available_class import FileUtil
         my_classes = FileUtil.my_Classes
         try:
-            with open(FileStorage.__file_path) as fp:
-                stored_data = json.load(fp)
-                for key, value in stored_data.items():
-                    class_name = stored_data[key]['__class__']
-                    self.__class__.__objects[key]\
-                        = my_classes[class_name](**stored_data[key])
-        except FileNotFoundError:
+            if os.stat(FileStorage.__file_path).st_size > 0:
+                with open(FileStorage.__file_path) as fp:
+                    stored_data = json.load(fp)
+                    for key, value in stored_data.items():
+                        class_name = stored_data[key]['__class__']
+                        self.__class__.__objects[key]\
+                            = my_classes[class_name](**stored_data[key])
+        except (FileNotFoundError):
             pass

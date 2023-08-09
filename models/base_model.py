@@ -21,8 +21,6 @@ class BaseModel:
         :updated_at: time of instance update
         """
         self.id = str(uuid.uuid4())
-        self.created_at = datetime.now()
-        self.updated_at = datetime.now()
         if kwargs:
             for k, v in kwargs.items():
                 if k == '__class__':
@@ -37,6 +35,8 @@ class BaseModel:
                     setattr(self, k, v)
 
         else:
+            self.created_at = datetime.now()
+            self.updated_at = datetime.now()
             storage.new(self)
 
     def save(self):

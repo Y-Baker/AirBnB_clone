@@ -5,6 +5,7 @@ for saving project classes
 """
 import json
 import os
+from models.engine.available_class import FileUtil
 
 
 class FileStorage:
@@ -13,7 +14,7 @@ class FileStorage:
     :file_path: : string - path to the JSON file (ex: file.json )
     :objects: dictionary - empty but will store all objects by <class name>.id
     """
-    __file_path = 'saved_object.json'
+    __file_path = FileUtil.saved_file
     __objects = {}
 
     def all(self):
@@ -60,11 +61,14 @@ class FileStorage:
         from models.engine.available_class import FileUtil
 
         try:
-            with open(FileStorage.__file_path) as fp:
-                stored_data = json.load(fp)
+            with open(self.__class__.__file_path) as fp:
+                try:
+                    stored_data = json.load(fp)
+                except json.decoder.JSONDecodeError:
+                    raise ValueError("File Empty")
                 for key, value in stored_data.items():
-                    class_name = stored_data[key]['__class__']
-                    self.__class__.__objects[key]\
-                        = my_classes[class_name](**stored_data[key])
+                    class_name = value['__class__']
+                    obj = FileUtil.create_class(class_name)
+                    self.__class__.__objects[key] = obj(**value)
         except FileNotFoundError:
             pass

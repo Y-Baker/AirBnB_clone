@@ -27,7 +27,7 @@ class FileUtil:
         "Amenity": Amenity,
         "Review": Review
     }
-    saved_file = "saved_object.json"
+    saved_file = "./saved_object.json"
 
     @classmethod
     def create_class(cls, name_obj):

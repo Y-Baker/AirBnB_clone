@@ -7,12 +7,13 @@ from shlex import split
 from models import storage
 from models.engine.available_class import FileUtil
 import re
+import json
 
 
 class HBNBCommand(cmd.Cmd):
     """The Command Interpreter for AirBnB Project"""
 
-    prompt = '(hbnb)' + ' '
+    prompt = "(hbnb)" + " "
     __available_class = FileUtil.my_Classes
 
     def emptyline(self):
@@ -104,7 +105,7 @@ class HBNBCommand(cmd.Cmd):
             if args[0] in HBNBCommand.__available_class:
                 list_obj = []
                 for key, value in available_instance.items():
-                    if key.split('.')[0] == args[0]:
+                    if key.split(".")[0] == args[0]:
                         list_obj.append(str(value))
                 print(list_obj)
             else:
@@ -160,6 +161,37 @@ class HBNBCommand(cmd.Cmd):
 
         print(count)
 
+    def do_patch_all(self, line):
+        """
+        function to update multiple items at same time
+        """
+        dic = json.loads(line[-1])
+        available_instance = storage.all()
+        print(type(list_string_to_dict(line[2:-1])))
+        print((list_string_to_dict(line[2:-1])))
+        if not line[0] or len(line) < 0:
+            print("** class name missing **")
+        elif line[0] not in HBNBCommand.__available_class:
+            print("** class doesn't exist **")
+        elif len(line) < 2:
+            print("** instance id missing **")
+        elif f"{line[0]}.{line[1]}" not in available_instance:
+            print("** no instance found **")
+        elif not dic.keys():
+            print("** attribute name missing **")
+        elif not dic.values():
+            print("** value missing **")
+        else:
+            obj = available_instance[f"{line[0]}.{line[1]}"]
+            for key, value in dic.items():
+                if key in ["id", "created_at", "updated_at"]:
+                    continue
+                if key in obj.__dict__:
+                    data_type = type(obj.__dict__[key])
+                    value = data_type(value)
+                obj.__dict__[key] = value
+            obj.save()
+
     def do_quit(self, arg):
         """Quit command to exit the program."""
         return True
@@ -167,6 +199,7 @@ class HBNBCommand(cmd.Cmd):
     def do_EOF(self, args):
         """EOF signal to exit the program"""
         return True
+
 
 def split_args(line):
     """This Function will Separate args and return a list of the arguments"""
@@ -184,7 +217,7 @@ def extract_function_info(line):
     to: fun: show, arg = [User, id]
     """
 
-    line_args = line.split('.')
+    line_args = line.split(".")
     args = [line_args[0]]
 
     match = re.match(r"(\w+)\(", line_args[1])
@@ -198,11 +231,42 @@ def extract_function_info(line):
 
     args_str = re.search(r"\((.*?)\)", line_args[1]).group(1)
     if args_str:
-        args_without_class = [arg.strip(',') for arg in split(args_str)]
-        args.extend(args_without_class)
+        if match_dict := re.search(r"{.*?}", args_str):
+            args_str_dict = match_dict.group()
+            args_without_class = [arg.strip(",") for arg in split(args_str)]
+            args.extend(args_without_class)
+            if args_str_dict:
+                args.append(args_str_dict)
+                return "patch_all", args
 
     return cmd, args
 
 
-if __name__ == '__main__':
+def list_string_to_dict(data):
+    if not isinstance(data, list):  # Check if data is not a list
+        return None
+
+    result_dict = {}
+
+    for i in range(0, len(data), 2):
+        key = data[i].rstrip(':').strip('{').strip('}')
+        value = data[i+1].strip('{').strip('}')
+
+        if value == 'true':
+            value = True
+        elif value == 'false':
+            value = False
+        else:
+            try:
+                value = int(value)
+            except ValueError:
+                try:
+                    value = float(value)
+                except ValueError:
+                    pass
+        result_dict[key] = value
+    return result_dict
+
+
+if __name__ == "__main__":
     HBNBCommand().cmdloop()

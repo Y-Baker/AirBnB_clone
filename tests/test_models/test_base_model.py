@@ -1,18 +1,17 @@
 #!/usr/bin/python3
 """
-test module for baseclass
+Test module for baseclass
 Defines unittests for base.py.
 Unittest classes:
     TestBase_instantiation - line 23
     TestBase_to_json_string - line 110
 """
 import sys
-sys.path.append('/root/alx/AirBnB_clone') 
 import datetime
 import unittest
 import uuid
-
 from models.base_model import BaseModel
+sys.path.append('/root/ALX/AirBnB_clone')
 
 
 class TestBaseModelInstantiation(unittest.TestCase):
@@ -24,6 +23,7 @@ class TestBaseModelInstantiation(unittest.TestCase):
         set up class method
         """
         cls.base = BaseModel()
+        cls.base1 = BaseModel()
         cls.base2 = BaseModel(
             **{
                 "id": "534b886d-ee20-4d43-bc78-208616fd05af",
@@ -63,6 +63,15 @@ class TestBaseModelInstantiation(unittest.TestCase):
             }
         )
 
+    def test_save_new_instance_1(self):
+        """
+        test_save_new_instance_1
+        """
+        old_date = self.base.updated_at
+        self.base.save()
+
+        self.assertNotEqual(old_date, self.base.updated_at)
+
     def test_no_arg(self):
         """
         test no args
@@ -77,33 +86,25 @@ class TestBaseModelInstantiation(unittest.TestCase):
         """
         test no args 2
         """
-        b1 = BaseModel()
-        b2 = BaseModel()
-        self.assertNotEqual(b1.id, b2.id)
-
+        self.assertNotEqual(self.base.id, self.base1.id)
 
     def test_no_arg3(self):
         """
         test no args 3
         """
-        b1 = BaseModel()
-        self.assertTrue(hasattr(b1, 'id'))
-
+        self.assertTrue(hasattr(self.base, 'id'))
 
     def test_no_arg4(self):
         """
         test no args 4
         """
-        b1 = BaseModel()
-        self.assertTrue(hasattr(b1, 'created_at'))
-
+        self.assertTrue(hasattr(self.base, 'created_at'))
 
     def test_no_arg5(self):
         """
         test no args 5
         """
-        b1 = BaseModel()
-        self.assertTrue(hasattr(b1, 'updated_at'))
+        self.assertTrue(hasattr(self.base, 'updated_at'))
 
     def test_kwargs(self):
         """
@@ -244,10 +245,10 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_created_at_not_date_str
         """
         with self.assertRaises(ValueError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
-                    "created_at": "kkasd",
+                    "created_at": "okays",
                     "updated_at": "2023-08-08T17:38:28.614516",
                 }
             )
@@ -257,7 +258,7 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_created_at_not_date_str
         """
         with self.assertRaises(TypeError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "created_at": 564.4698,
@@ -270,7 +271,7 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_created_at_not_date_str
         """
         with self.assertRaises(TypeError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "created_at": 564,
@@ -283,7 +284,7 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_created_at_not_date_bool
         """
         with self.assertRaises(TypeError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "created_at": True,
@@ -291,12 +292,12 @@ class TestBaseModelInstantiation(unittest.TestCase):
                 }
             )
 
-    def test_created_at_not_date_int(self):
+    def test_created_at_not_date_int_1(self):
         """
         test_created_at_not_date_int
         """
         with self.assertRaises(ValueError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "created_at": "564",
@@ -304,12 +305,12 @@ class TestBaseModelInstantiation(unittest.TestCase):
                 }
             )
 
-    def test_created_at_not_date_float(self):
+    def test_created_at_not_date_float_1(self):
         """
         test_created_at_not_date_float
         """
         with self.assertRaises(ValueError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "created_at": "5668.154",
@@ -322,10 +323,10 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_updated_at_not_date_str
         """
         with self.assertRaises(ValueError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
-                    "updated_at": "kkasd",
+                    "updated_at": "okays",
                     "created_at": "2023-08-08T17:38:28.614516",
                 }
             )
@@ -335,7 +336,7 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_updated_at_not_date_float
         """
         with self.assertRaises(TypeError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "updated_at": 564.4698,
@@ -348,7 +349,7 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_updated_at_not_date_int
         """
         with self.assertRaises(TypeError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "updated_at": 564,
@@ -361,7 +362,7 @@ class TestBaseModelInstantiation(unittest.TestCase):
         test_updated_at_not_date_bool
         """
         with self.assertRaises(TypeError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "updated_at": True,
@@ -369,12 +370,12 @@ class TestBaseModelInstantiation(unittest.TestCase):
                 }
             )
 
-    def test_updated_at_not_date_int(self):
+    def test_updated_at_not_date_int_1(self):
         """
         test_updated_at_not_date_int
         """
         with self.assertRaises(ValueError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "updated_at": "564",
@@ -382,12 +383,12 @@ class TestBaseModelInstantiation(unittest.TestCase):
                 }
             )
 
-    def test_updated_at_not_date_float(self):
+    def test_updated_at_not_date_float_1(self):
         """
         test_updated_at_not_date_float
         """
         with self.assertRaises(ValueError):
-            base = BaseModel(
+            BaseModel(
                 **{
                     "id": "654654",
                     "updated_at": "5668.154",
@@ -451,9 +452,9 @@ class TestBaseModelInstantiation(unittest.TestCase):
         )
         self.assertEqual(BaseModel, base.__class__)
 
-    def test_unpacking_diffrent_attr_int(self):
+    def test_unpacking_different_attr_int(self):
         """
-        test_unpacking_diffrent_attr_int
+        test_unpacking_different_attr_int
         """
         x = 5
         base = BaseModel(
@@ -467,9 +468,9 @@ class TestBaseModelInstantiation(unittest.TestCase):
         )
         self.assertEqual(x, base.x)
 
-    def test_unpacking_diffrent_attr_float(self):
+    def test_unpacking_different_attr_float(self):
         """
-        test_unpacking_diffrent_attr_float
+        test_unpacking_different_attr_float
         """
         x = 546.4654
         base = BaseModel(
@@ -483,9 +484,9 @@ class TestBaseModelInstantiation(unittest.TestCase):
         )
         self.assertEqual(x, base.x)
 
-    def test_unpacking_diffrent_attr_bool(self):
+    def test_unpacking_different_attr_bool(self):
         """
-        test_unpacking_diffrent_attr_bool
+        test_unpacking_different_attr_bool
         """
         x = True
         base = BaseModel(
@@ -499,9 +500,9 @@ class TestBaseModelInstantiation(unittest.TestCase):
         )
         self.assertEqual(x, base.x)
 
-    def test_unpacking_diffrent_attr_list(self):
+    def test_unpacking_different_attr_list(self):
         """
-        test_unpacking_diffrent_attr_list
+        test_unpacking_different_attr_list
         """
         x = [True, 56, "str"]
         base = BaseModel(
@@ -515,11 +516,11 @@ class TestBaseModelInstantiation(unittest.TestCase):
         )
         self.assertEqual(x, base.x)
 
-    def test_unpacking_diffrent_attr_tuple(self):
+    def test_unpacking_different_attr_tuple(self):
         """
-        test_unpacking_diffrent_attr_tuple
+        test_unpacking_different_attr_tuple
         """
-        x = (True, 85964, "asqeqw")
+        x = (True, 85964, "basque")
         base = BaseModel(
             **{
                 "id": "654654",
@@ -531,11 +532,11 @@ class TestBaseModelInstantiation(unittest.TestCase):
         )
         self.assertEqual(x, base.x)
 
-    def test_unpacking_diffrent_attr_set(self):
+    def test_unpacking_different_attr_set(self):
         """
-        test_unpacking_diffrent_attr_set
+        test_unpacking_different_attr_set
         """
-        x = set(("asd", 64968, True))
+        x = {"asd", 64968, True}
         base = BaseModel(
             **{
                 "id": "654654",
@@ -547,11 +548,11 @@ class TestBaseModelInstantiation(unittest.TestCase):
         )
         self.assertEqual(x, base.x)
 
-    def test_unpacking_diffrent_attr_dict(self):
+    def test_unpacking_different_attr_dict(self):
         """
-        test_unpacking_diffrent_attr_dict
+        test_unpacking_different_attr_dict
         """
-        x = {"id": 654, "name": "hamada", "age": 50}
+        x = {"id": 654, "name": "Ramada", "age": 50}
         base = BaseModel(
             **{
                 "id": "654654",
@@ -655,9 +656,9 @@ class TestBase_to_dict(unittest.TestCase):
             self.base5.__str__(),
         )
 
-    def test_save_fromunpacking_1(self):
+    def test_save_from_unpacking_1(self):
         """
-        test_save_fromunpacking_1
+        test_save_from unpacking_1
         """
         base = BaseModel(
             **{
@@ -670,23 +671,15 @@ class TestBase_to_dict(unittest.TestCase):
         base.save()
         self.assertNotEqual(old_date, base.updated_at)
 
-    def test_save_fromunpacking_2(self):
+    def test_save_from_unpacking_2(self):
         """
-        test_save_fromunpacking_2
+        test_save_from unpacking_2
+
+
         """
         old_date = self.base5.updated_at
         self.base5.save()
         self.assertNotEqual(old_date, self.base5.updated_at)
-
-    def test_save_new_instance_1(self):
-        """
-        test_save_new_instance_1
-        """
-        base = BaseModel()
-        old_date = base.updated_at
-        base.save()
-
-        self.assertNotEqual(old_date, base.updated_at)
 
 
 if __name__ == "__main__":

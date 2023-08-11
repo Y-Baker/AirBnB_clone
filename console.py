@@ -136,7 +136,6 @@ class HBNBCommand(cmd.Cmd):
         """EOF signal to exit the program"""
         return True
 
-
 def split_args(line):
     """This Function will Separate args and return a list of the arguments"""
     args = [_.strip(",") for _ in split(line)]

@@ -7,7 +7,7 @@ for project classes
 
 import uuid
 from datetime import datetime
-from models import storage
+import models
 
 
 class BaseModel:
@@ -30,10 +30,10 @@ class BaseModel:
                         self.id = v
 
                 elif k in ['created_at', 'updated_at']:
-                    setattr(self, k, datetime.fromisoformat(v))
+                    date_obj = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f")
+                    setattr(self, k, date_obj)
                 else:
                     setattr(self, k, v)
-
         else:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
@@ -45,8 +45,8 @@ class BaseModel:
         method to update the public instance attribute updated_at
         with the current datetime
         """
-        storage.save()
         self.updated_at = datetime.now()
+        models.storage.save()
 
     def to_dict(self):
         """

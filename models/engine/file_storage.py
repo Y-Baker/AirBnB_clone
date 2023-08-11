@@ -5,6 +5,7 @@ for saving project classes
 """
 import json
 import os
+from models.engine.available_class import FileUtil
 
 
 class FileStorage:
@@ -13,7 +14,7 @@ class FileStorage:
     :file_path: : string - path to the JSON file (ex: file.json )
     :objects: dictionary - empty but will store all objects by <class name>.id
     """
-    __file_path = '/root/ALX/AirBnB_clone/saved_object.json'
+    __file_path = FileUtil.saved_file
     __objects = {}
 
     def all(self):

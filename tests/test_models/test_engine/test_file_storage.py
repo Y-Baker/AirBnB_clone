@@ -31,6 +31,25 @@ class TestFileStorage(unittest.TestCase):
                 "updated_at": "2023-06-07T22:09:22.546435",
             }
         )
+        try:
+            os.rename(FileUtil.saved_file, "tmp")
+        except IOError:
+            pass
+        FileStorage.__objects = {}
+
+    @classmethod
+    def tearDown(cls):
+        """
+        tear down class
+        """
+        try:
+            os.remove(FileUtil.saved_file)
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", FileUtil.saved_file)
+        except IOError:
+            pass
 
     def test_instance(self):
         """

@@ -91,14 +91,16 @@ class TestFileStorage(unittest.TestCase):
         self.base1.name = "abdo"
         storage.new(self.base1)
         dict2 = storage.all()
-        self.assertEqual(dict2["BaseModel.1002"].to_dict(), self.base1.to_dict())
+        self.assertEqual(dict2["BaseModel.1002"].to_dict(),
+                         self.base1.to_dict())
         self.assertEqual("abdo", dict2["BaseModel.1002"].name)
 
     def test_new_sets_object_in_objects_dictionary_with_correct_key(self):
         file_storage = FileStorage()
         model_key = f"{self.base1.__class__.__name__}.{self.base1.id}"
         file_storage.new(self.base1)
-        self.assertEqual(file_storage.all()[model_key].to_dict(), self.base1.to_dict())
+        self.assertEqual(file_storage.all()[model_key].to_dict(),
+                         self.base1.to_dict())
 
     def test_save(self):
         """

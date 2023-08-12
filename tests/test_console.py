@@ -16,13 +16,19 @@ class Test_ParseLine_not_Detected(unittest.TestCase):
 class Test_extract_function_info(unittest.TestCase):
 
 """
-
+import re
 import unittest
 from unittest.mock import patch
 from console import HBNBCommand
 from console import extract_function_info
 from console import list_string_to_dict
+from console import split_args
+from models import storage
+from models.user import User
+from datetime import datetime
 
+from models.engine.file_storage import FileStorage
+import os
 from io import StringIO
 from models.engine.available_class import FileUtil
 
@@ -270,6 +276,7 @@ class Test_ParseLine_Detected_BaseModel(unittest.TestCase):
     """
     Test_ParseLine_Detected_BaseModel
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -439,6 +446,7 @@ class Test_ParseLine_Detected_Amenity(unittest.TestCase):
     """
     Test_ParseLine_Detected_Amenity
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -608,6 +616,7 @@ class Test_ParseLine_Detected_City(unittest.TestCase):
     """
     Test_ParseLine_Detected_City
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -777,6 +786,7 @@ class Test_ParseLine_Detected_Place(unittest.TestCase):
     """
     Test_ParseLine_Detected_Place
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -946,6 +956,7 @@ class Test_ParseLine_Detected_Review(unittest.TestCase):
     """
     Test_ParseLine_Detected_Review
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -1115,6 +1126,7 @@ class Test_ParseLine_Detected_State(unittest.TestCase):
     """
     Test_ParseLine_Detected_State
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -1284,6 +1296,7 @@ class Test_ParseLine_Detected_User(unittest.TestCase):
     """
     Test_ParseLine_Detected_User
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -1453,6 +1466,7 @@ class Test_ParseLine_not_Detected(unittest.TestCase):
     """
     Test_ParseLine_not_Detected
     """
+
     def setUp(self):
         """cmd test class setup"""
         self.hbnbCmd = HBNBCommand()
@@ -1540,13 +1554,12 @@ class Test_extract_function_info(unittest.TestCase):
         test_extract_function_info
         gets called when line contains a Class.command(args)
         """
-        cmd, args = extract_function_info("User.update('id', "
-                                          "{'id': '5645',"
-                                          "'name': 'khames',"
-                                          "'age': 89})")
+        line = "User.update('id', {'id': '5645', 'name': 'khames', 'age': 89})"
+        cmd, args = extract_function_info(line)
         self.assertEqual("patch_all", cmd)
-        self.assertEqual(['User', 'id', '{id:', '5645',
-                          'name:', 'khames', 'age:', '89}'], args)
+        expected = ['User', 'id', '{id:',
+                    '5645', 'name:', 'khames', 'age:', '89}']
+        self.assertEqual(expected, args)
 
 
 class Test_Console_exit(unittest.TestCase):
@@ -1564,6 +1577,7 @@ class Test_Console_exit(unittest.TestCase):
 
 class Test_list_string_to_dict(unittest.TestCase):
     """Test_list_string_to_dict"""
+
     def test_list_string_to_dict_not_list_none(self):
         """
         test_list_string_to_dict_not_list
@@ -1696,6 +1710,101 @@ class Test_list_string_to_dict(unittest.TestCase):
         dct = list_string_to_dict(["{first_name:", "John", "age:", "89}"])
         self.assertIsNotNone(dct)
         self.assertEqual({"first_name": "John", "age": 89}, dct)
+
+
+class Test_split_args(unittest.TestCase):
+    """
+    class to test split args function
+    """
+
+    def test_split_args(self):
+        """
+        test split_args functionality
+        """
+        line = 'update user'
+        actual_val = split_args(line)
+        expected_val = ['update', 'user']
+        self.assertEqual(expected_val, actual_val)
+
+    def test_split_args1(self):
+        """
+        test split_args functionality
+        """
+        line = 'update user "id", "key" "val"'
+        actual_val = split_args(line)
+        expected_val = ['update', 'user', 'id', 'key', 'val']
+        self.assertEqual(expected_val, actual_val)
+
+
+class Test_patch_all(unittest.TestCase):
+    """
+    unit test cases for do_patch_all method
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        """
+        setup class
+        """
+        try:
+            os.rename("saved_object.json", "tmp")
+        except IOError:
+            pass
+        FileStorage.__objects = {}
+        cls.hnbnCmd = HBNBCommand()
+        cls.user = User()
+        cls.ids = cls.user.id
+        cls.created = cls.user.created_at
+        cls.updated = cls.user.updated_at
+
+        cls.user.save()
+
+    @classmethod
+    def tearDown(cls):
+        """
+        tear down class
+        """
+        try:
+            os.remove("saved_object.json")
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", "saved_object.json")
+        except IOError:
+            pass
+
+    @patch("sys.stdout", new_callable=StringIO)
+    def test__patch_all(self, mock_stdout):
+        """
+        test_patch_all
+        """
+        ids = self.ids
+        dct = {
+            'first_name': 'mohamed',
+            'last_name': 'ahmed',
+            'age': 31
+        }
+        line = f"User.update({ids}, {dct})"
+        self.hnbnCmd.onecmd(line)
+
+        self.hnbnCmd.onecmd(f'User.show({ids})')
+        data_string  = mock_stdout.getvalue()
+
+        # Regular expressions to extract values
+        id_match = re.search(r"'id': '(.+?)'", data_string)
+        first_name_match = re.search(r"'first_name': '(.+?)'", data_string)
+        last_name_match = re.search(r"'last_name': '(.+?)'", data_string)
+        age_match = re.search(r"'age': (\d+)", data_string)
+
+        # Extracted values
+        id_value = id_match.group(1)
+        first_name_value = first_name_match.group(1)
+        last_name_value = last_name_match.group(1)
+        age_value = int(age_match.group(1))
+        self.assertEqual(ids, id_value)
+        self.assertEqual("mohamed", first_name_value)
+        self.assertEqual("ahmed", last_name_value)
+        self.assertEqual(31, age_value)
 
 
 if __name__ == "__main__":

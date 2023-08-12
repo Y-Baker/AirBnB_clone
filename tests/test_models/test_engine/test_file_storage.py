@@ -11,7 +11,7 @@ from models.base_model import BaseModel
 from models.city import City
 from models.engine.file_storage import FileStorage
 from models import storage
-
+from models.engine.available_class import FileUtil
 
 
 class TestFileStorage(unittest.TestCase):
@@ -54,7 +54,7 @@ class TestFileStorage(unittest.TestCase):
         test method all that retries all objects saved in application memory
         """
         try:
-            with open("/root/ALX/AirBnB_clone/saved_object.json") as fp:
+            with open(FileUtil.saved_file) as fp:
                 dict1 = json.load(fp)
                 dict2 = storage.all()
 
@@ -87,7 +87,7 @@ class TestFileStorage(unittest.TestCase):
         """
         storage.new(self.base1)
         storage.save()
-        with open("/root/ALX/AirBnB_clone/saved_object.json") as fp:
+        with open(FileUtil.saved_file) as fp:
             dict1 = json.load(fp)
             self.assertIn(self.base1.to_dict(), dict1.values())
 
@@ -97,7 +97,7 @@ class TestFileStorage(unittest.TestCase):
         to check it reloads in the file or not
         """
         try:
-            if os.stat('/root/ALX/AirBnB_clone/saved_object.json').st_size > 0:
+            if os.stat(FileUtil.saved_file).st_size > 0:
                 self.assertGreater(len(storage.all()), 0)
         except FileNotFoundError:
             pass
@@ -111,7 +111,7 @@ class TestFileStorage(unittest.TestCase):
             city = City()
             city.name = "cairo"
             storage.save()
-            if os.stat('/root/ALX/AirBnB_clone/saved_object.json').st_size > 0:
+            if os.stat(FileUtil.saved_file).st_size > 0:
                 storage.reload()
                 dict1 = storage.all()
                 self.assertIn(f"City.{city.id}", dict1)

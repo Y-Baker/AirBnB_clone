@@ -247,8 +247,8 @@ def extract_function_info(line):
 
 def list_string_to_dict(data):
     """
-    helper function to convert a list to a key value 
-    pair dictionary 
+    helper function to convert a list to a key value
+    pair dictionary
     """
     if not isinstance(data, list):  # Check if data is not a list
         return None

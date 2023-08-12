@@ -1788,7 +1788,7 @@ class Test_patch_all(unittest.TestCase):
         self.hnbnCmd.onecmd(line)
 
         self.hnbnCmd.onecmd(f'User.show({ids})')
-        data_string  = mock_stdout.getvalue()
+        data_string = mock_stdout.getvalue()
 
         # Regular expressions to extract values
         id_match = re.search(r"'id': '(.+?)'", data_string)

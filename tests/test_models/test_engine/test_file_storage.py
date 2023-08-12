@@ -8,6 +8,11 @@ import json
 import os
 import unittest
 from models.base_model import BaseModel
+from models.user import User
+from models.state import State
+from models.place import Place
+from models.amenity import Amenity
+from models.review import Review
 from models.city import City
 from models.engine.file_storage import FileStorage
 from models import storage
@@ -231,6 +236,80 @@ class TestFileStorage(unittest.TestCase):
                              objects['BaseModel.1002'].to_dict())
         except FileNotFoundError:
             pass
+
+    def test_instantiation_with_Type_Error(self):
+        """Test if None arg"""
+        with self.assertRaises(TypeError):
+            FileStorage(None)
+
+        with self.assertRaises(TypeError):
+            storage.all(None)
+
+        with self.assertRaises(TypeError):
+            storage.new(BaseModel(), 1)
+
+        with self.assertRaises(TypeError):
+            storage.reload(None)
+
+    def test_dict(self):
+        """Test if some var is dic or not"""
+        self.assertEqual(dict, type(FileStorage.__objects))
+        self.assertEqual(dict, type(storage.all()))
+
+    def test_new(self):
+        """
+        Test New Method
+        """
+        obj1 = User()
+        obj2 = State()
+        obj3 = Place()
+        obj4 = City()
+        obj5 = Amenity()
+        obj6 = Review()
+        storage.new(obj1)
+        storage.new(obj2)
+        storage.new(obj3)
+        storage.new(obj4)
+        storage.new(obj5)
+        storage.new(obj6)
+        self.assertIn("User." + obj1.id, storage.all().keys())
+        self.assertIn(obj1, storage.all().values())
+        self.assertIn("State." + obj2.id, storage.all().keys())
+        self.assertIn(obj2, storage.all().values())
+        self.assertIn("Place." + obj3.id, storage.all().keys())
+        self.assertIn(obj3, storage.all().values())
+        self.assertIn("City." + obj4.id, storage.all().keys())
+        self.assertIn(obj4, storage.all().values())
+        self.assertIn("Amenity." + obj5.id, storage.all().keys())
+        self.assertIn(obj5, storage.all().values())
+        self.assertIn("Review." + obj6.id, storage.all().keys())
+        self.assertIn(obj6, storage.all().values())
+
+    def test_reload(self):
+        """
+        Test Reload Method
+        """
+        obj1 = User()
+        obj2 = State()
+        obj3 = Place()
+        obj4 = City()
+        obj5 = Amenity()
+        obj6 = Review()
+        storage.new(obj1)
+        storage.new(obj2)
+        storage.new(obj3)
+        storage.new(obj4)
+        storage.new(obj5)
+        storage.new(obj6)
+        storage.save()
+        storage.reload()
+        objs = FileStorage.__objects
+        self.assertIn("User." + obj1.id, objs)
+        self.assertIn("State." + obj2.id, objs)
+        self.assertIn("Place." + obj3.id, objs)
+        self.assertIn("City." + obj4.id, objs)
+        self.assertIn("Amenity." + obj5.id, objs)
+        self.assertIn("Review." + obj6.id, objs)
 
 
 if __name__ == "__main__":

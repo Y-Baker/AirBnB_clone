@@ -1569,9 +1569,15 @@ class Test_Console_exit(unittest.TestCase):
     """
 
     def test_quit_exits(self):
+        """
+        Test if Quit Exit
+        """
         self.assertTrue(HBNBCommand().onecmd("quit"))
 
     def test_EOF_exits(self):
+        """
+        Test IF EOF exits
+        """
         self.assertTrue(HBNBCommand().onecmd("EOF"))
 
 

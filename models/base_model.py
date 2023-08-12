@@ -30,7 +30,7 @@ class BaseModel:
                         self.id = v
 
                 elif k in ['created_at', 'updated_at']:
-                    date_obj = datetime.strptime(v, "%Y-%m-%dT%H:%M:%S.%f")
+                    date_obj = datetime.fromisoformat(v)
                     setattr(self, k, date_obj)
                 else:
                     setattr(self, k, v)

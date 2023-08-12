@@ -115,7 +115,7 @@ class HBNBCommand(cmd.Cmd):
         """
         Updates an instance based on the class name and id
         by adding or updating attribute
-        Usage: update <class name> <id> <attribute name> "<attribute value>"
+        Usage: update <class name> <id> <attribute name> <attribute value>
         """
         available_instance = storage.all()
 
@@ -249,18 +249,27 @@ def list_string_to_dict(data):
     if not isinstance(data, list):  # Check if data is not a list
         return None
     result_dict = {}
+    if len(data) == 0:
+        print("** attribute name missing **")
+        return None
 
+    if((data[0].rstrip(":").strip("{").strip("}") == "")):
+        print("** attribute name missing **")
+        return None
+
+    if (len(data) % 2 == 1):
+        print("** value missing **")
+        return None
     for i in range(0, len(data), 2):
-        if (len(data) == 0) or (not data[i].rstrip(":")
-                                .strip("{").strip("}")):
-            print("** attribute name missing **")
-            return None
-        elif (len(data) == 1) or (not data[i + 1].strip("{").strip("}")):
-            print("** value missing **")
-            return None
-
         key = data[i].rstrip(":").strip("{").strip("}")
         value = data[i + 1].strip("{").strip("}")
+        if((key == "")):
+            print("** attribute name missing **")
+            return None
+
+        elif ((value == "")):
+            print("** value missing **")
+            return None
 
         if value.lower() == "true":
             value = True

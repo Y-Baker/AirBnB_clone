@@ -40,6 +40,17 @@ class TestFileStorage(unittest.TestCase):
         """
         self.assertEqual("1002", self.base1.id)
 
+    def test_instance_fileStorage(self):
+        """cheks for file storage class instantation"""
+        obj = FileStorage()
+        self.assertIsInstance(obj, FileStorage)
+
+    def test_docs(self):
+        """Test for docstrings of file storage class"""
+        self.assertIsNotNone(FileStorage.all)
+        self.assertIsNotNone(FileStorage.new)
+        self.assertIsNotNone(FileStorage.save)
+        self.assertIsNotNone(FileStorage.reload)
     def test_all(self):
         """
         test method all that retries all objects saved in application memory

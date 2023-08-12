@@ -5,6 +5,7 @@ for saving project classes
 """
 import json
 import os
+from models.engine.available_class import FileUtil
 
 
 class FileStorage:
@@ -13,12 +14,12 @@ class FileStorage:
     :file_path: : string - path to the JSON file (ex: file.json )
     :objects: dictionary - empty but will store all objects by <class name>.id
     """
-    __file_path = 'saved_object.json'
+    __file_path = FileUtil.saved_file
     __objects = {}
 
     def all(self):
         """_summary_
-            method to return the dictionary will all the instnces created
+            method to return the dictionary will all the instances created
         Returns:
             dictionary: dictionary containing objects persisted in my app
         """
@@ -30,7 +31,7 @@ class FileStorage:
         Args:
             obj (any type of my project classes):
             sets the object in the objects
-            dictionary with key classname.obj_id
+            dictionary with key class name.obj_id
         """
         obj_key = f"{obj.__class__.__name__}.{obj.id}"
         self.__class__.__objects[obj_key] = obj
@@ -58,13 +59,15 @@ class FileStorage:
         :return:no return
         """
         from models.engine.available_class import FileUtil
-
+        my_classes = FileUtil.my_Classes
         try:
-            with open(FileStorage.__file_path) as fp:
-                stored_data = json.load(fp)
-                for key, value in stored_data.items():
-                    class_name = stored_data[key]['__class__']
-                    self.__class__.__objects[key]\
-                        = my_classes[class_name](**stored_data[key])
+            if os.stat(FileStorage.__file_path).st_size > 0:
+                with open(FileStorage.__file_path) as fp:
+                    stored_data = json.load(fp)
+                    for key, value in stored_data.items():
+                        class_name = stored_data[key]['__class__']
+                        self.__class__.__objects[key] \
+                            = my_classes[class_name](**stored_data[key])
+
         except FileNotFoundError:
             pass

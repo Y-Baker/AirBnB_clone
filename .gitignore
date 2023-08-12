@@ -1,2 +1,8 @@
 __pycache__/
 *.json
+demo.py
+.vscode
+venv
+**/_trial_temp
+/tests/test_models/_trial_temp/
+.idea

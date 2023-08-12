@@ -7,7 +7,6 @@ from shlex import split
 from models import storage
 from models.engine.available_class import FileUtil
 import re
-import json
 
 
 class HBNBCommand(cmd.Cmd):
@@ -247,8 +246,8 @@ def extract_function_info(line):
 
 def list_string_to_dict(data):
     """
-    helper function to convert a list to a key value 
-    pair dictionary 
+    helper function to convert a list to a key value
+    pair dictionary
     """
     if not isinstance(data, list):  # Check if data is not a list
         return None
@@ -257,11 +256,11 @@ def list_string_to_dict(data):
         print("** attribute name missing **")
         return None
 
-    if((data[0].rstrip(":").strip("{").strip("}") == "")):
+    if data[0].rstrip(":").strip("{").strip("}") == "":
         print("** attribute name missing **")
         return None
 
-    if (len(data) % 2 == 1):
+    if len(data) % 2 == 1:
         print("** value missing **")
         return None
     for i in range(0, len(data), 2):
@@ -271,7 +270,7 @@ def list_string_to_dict(data):
             print("** attribute name missing **")
             return None
 
-        elif ((value == "")):
+        elif value == "":
             print("** value missing **")
             return None
 

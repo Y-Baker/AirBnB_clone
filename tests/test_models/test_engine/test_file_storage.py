@@ -12,6 +12,7 @@ from models.base_model import BaseModel
 from models.city import City
 from models.engine.file_storage import FileStorage
 from models import storage
+from models.engine.available_class import FileUtil
 
 sys.path.append("/root/ALX/AirBnB_clone")
 
@@ -33,6 +34,25 @@ class TestFileStorage(unittest.TestCase):
                 "updated_at": "2023-06-07T22:09:22.546435",
             }
         )
+        try:
+            os.rename(FileUtil.saved_file, "tmp")
+        except IOError:
+            pass
+        FileStorage.__objects = {}
+
+    @classmethod
+    def tearDown(cls):
+        """
+        tear down class
+        """
+        try:
+            os.remove(FileUtil.saved_file)
+        except IOError:
+            pass
+        try:
+            os.rename("tmp", FileUtil.saved_file)
+        except IOError:
+            pass
 
     def test_instance(self):
         """
@@ -56,7 +76,7 @@ class TestFileStorage(unittest.TestCase):
         test method all that retries all objects saved in application memory
         """
         try:
-            with open("/root/ALX/AirBnB_clone/saved_object.json") as fp:
+            with open(FileUtil.saved_file) as fp:
                 dict1 = json.load(fp)
                 dict2 = storage.all()
 
@@ -89,7 +109,7 @@ class TestFileStorage(unittest.TestCase):
         """
         storage.new(self.base1)
         storage.save()
-        with open("/root/ALX/AirBnB_clone/saved_object.json") as fp:
+        with open(FileUtil.saved_file) as fp:
             dict1 = json.load(fp)
             self.assertIn(self.base1.to_dict(), dict1.values())
 

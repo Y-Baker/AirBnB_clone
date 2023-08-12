@@ -43,7 +43,10 @@ class Basic_Instantiation(unittest.TestCase):
         Test The New Object in file_stroge.__objects
         """
         saved = storage.all().values()
-        self.assertIn(self.obj, saved)
+        obj_dict = []
+        for val in saved:
+            obj_dict.append(val.to_dict())
+        self.assertIn(self.obj.to_dict(), obj_dict)
 
     def test_id_is_str(self):
         """

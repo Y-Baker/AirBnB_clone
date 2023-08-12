@@ -165,10 +165,10 @@ class HBNBCommand(cmd.Cmd):
         """
         function to update multiple items at same time
         """
-        dic = json.loads(line[-1])
+        dic = list_string_to_dict(line[2:])
+        if dic is None:
+            return False
         available_instance = storage.all()
-        print(type(list_string_to_dict(line[2:-1])))
-        print((list_string_to_dict(line[2:-1])))
         if not line[0] or len(line) < 0:
             print("** class name missing **")
         elif line[0] not in HBNBCommand.__available_class:
@@ -188,7 +188,10 @@ class HBNBCommand(cmd.Cmd):
                     continue
                 if key in obj.__dict__:
                     data_type = type(obj.__dict__[key])
-                    value = data_type(value)
+                    try:
+                        value = data_type(value)
+                    except (ValueError, TypeError):
+                        pass
                 obj.__dict__[key] = value
             obj.save()
 
@@ -228,33 +231,40 @@ def extract_function_info(line):
 
     if cmd == "create":
         return None, args
-
     args_str = re.search(r"\((.*?)\)", line_args[1]).group(1)
     if args_str:
-        if match_dict := re.search(r"{.*?}", args_str):
-            args_str_dict = match_dict.group()
-            args_without_class = [arg.strip(",") for arg in split(args_str)]
-            args.extend(args_without_class)
-            if args_str_dict:
-                args.append(args_str_dict)
-                return "patch_all", args
-
+        args_without_class = [arg.strip(",") for arg in split(args_str)]
+        args.extend(args_without_class)
+        match_dict = re.search(r"{.*?}", args_str)
+        if match_dict:
+            return "patch_all", args
+            # args_str_dict = match_dict.group()
+            # if args_str_dict:
+            #     args.append(args_str_dict)
+            #     return "patch_all", args
     return cmd, args
 
 
 def list_string_to_dict(data):
     if not isinstance(data, list):  # Check if data is not a list
         return None
-
     result_dict = {}
 
     for i in range(0, len(data), 2):
-        key = data[i].rstrip(':').strip('{').strip('}')
-        value = data[i+1].strip('{').strip('}')
+        if (len(data) == 0) or (not data[i].rstrip(":")
+                                .strip("{").strip("}")):
+            print("** attribute name missing **")
+            return None
+        elif (len(data) == 1) or (not data[i + 1].strip("{").strip("}")):
+            print("** value missing **")
+            return None
 
-        if value == 'true':
+        key = data[i].rstrip(":").strip("{").strip("}")
+        value = data[i + 1].strip("{").strip("}")
+
+        if value.lower() == "true":
             value = True
-        elif value == 'false':
+        elif value.lower() == "false":
             value = False
         else:
             try:

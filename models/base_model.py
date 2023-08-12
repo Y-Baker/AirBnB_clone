@@ -37,7 +37,7 @@ class BaseModel:
         else:
             self.created_at = datetime.now()
             self.updated_at = datetime.now()
-            storage.new(self)
+            models.storage.new(self)
 
     def save(self):
 

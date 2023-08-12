@@ -6,12 +6,10 @@ Unittest classes:
     TestBase_instantiation - line 23
     TestBase_to_json_string - line 110
 """
-import sys
 import datetime
 import unittest
 import uuid
 from models.base_model import BaseModel
-sys.path.append('/root/ALX/AirBnB_clone')
 
 
 class TestBaseModelInstantiation(unittest.TestCase):

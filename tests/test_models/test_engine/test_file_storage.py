@@ -5,7 +5,6 @@ Defines unittests for file_storage.py.
 Unittest classes:
 """
 import json
-import sys
 import os
 import unittest
 from models.base_model import BaseModel
@@ -13,8 +12,6 @@ from models.city import City
 from models.engine.file_storage import FileStorage
 from models import storage
 from models.engine.available_class import FileUtil
-
-sys.path.append("/root/ALX/AirBnB_clone")
 
 
 class TestFileStorage(unittest.TestCase):
@@ -122,7 +119,7 @@ class TestFileStorage(unittest.TestCase):
         to check it reloads in the file or not
         """
         try:
-            if os.stat('/root/ALX/AirBnB_clone/saved_object.json').st_size > 0:
+            if os.stat(FileUtil.saved_file).st_size > 0:
                 self.assertGreater(len(storage.all()), 0)
         except FileNotFoundError:
             pass
@@ -136,7 +133,7 @@ class TestFileStorage(unittest.TestCase):
             city = City()
             city.name = "cairo"
             storage.save()
-            if os.stat('/root/ALX/AirBnB_clone/saved_object.json').st_size > 0:
+            if os.stat(FileUtil.saved_file).st_size > 0:
                 storage.reload()
                 dict1 = storage.all()
                 self.assertIn(f"City.{city.id}", dict1)

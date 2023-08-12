@@ -5,7 +5,6 @@ Defines unittests for file_storage.py.
 Unittest classes:
 """
 import json
-import sys
 import os
 import unittest
 from models.base_model import BaseModel
@@ -13,7 +12,6 @@ from models.city import City
 from models.engine.file_storage import FileStorage
 from models import storage
 
-sys.path.append("/root/ALX/AirBnB_clone")
 
 
 class TestFileStorage(unittest.TestCase):

@@ -102,6 +102,7 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual("abdo", dict2["BaseModel.1002"].name)
 
     def test_new_sets_object_in_objects_dictionary_with_correct_key(self):
+        """Test if object is in dictionary"""
         file_storage = FileStorage()
         model_key = f"{self.base1.__class__.__name__}.{self.base1.id}"
         file_storage.new(self.base1)

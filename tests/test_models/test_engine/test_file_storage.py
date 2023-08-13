@@ -66,7 +66,7 @@ class TestFileStorage(unittest.TestCase):
         """cheks for file storage class instantation"""
         obj = FileStorage()
         self.assertIsInstance(obj, FileStorage)
-        self.assertEqual(FileStorage, storage)
+        self.assertEqual(FileStorage, type(storage))
 
     def test_docs(self):
         """Test for docstrings of file storage class"""
@@ -260,7 +260,7 @@ class TestFileStorage(unittest.TestCase):
         """Test if some var is dic or not"""
         self.assertEqual(dict, type(FileStorage.__objects))
         self.assertEqual(dict, type(storage.all()))
-        self.assertEqual(str, type(FileStorage.__file_path))
+        self.assertEqual(str, type(FileStorage._FileStorage__file_path))
 
     def test_new(self):
         """
@@ -309,7 +309,7 @@ class TestFileStorage(unittest.TestCase):
         storage.new(obj6)
         storage.save()
         storage.reload()
-        objs = FileStorage.__objects
+        objs = storage.all()
         self.assertIn("User." + obj1.id, objs)
         self.assertIn("State." + obj2.id, objs)
         self.assertIn("Place." + obj3.id, objs)

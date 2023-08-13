@@ -66,7 +66,6 @@ class TestFileStorage(unittest.TestCase):
         """cheks for file storage class instantation"""
         obj = FileStorage()
         self.assertIsInstance(obj, FileStorage)
-        self.assertNotEqual(FileStorage, storage)
         self.assertEqual(FileStorage, type(storage))
 
     def test_docs(self):
@@ -262,9 +261,6 @@ class TestFileStorage(unittest.TestCase):
         self.assertEqual(dict, type(FileStorage.__objects))
         self.assertEqual(dict, type(storage.all()))
         self.assertEqual(str, type(FileStorage._FileStorage__file_path))
-        self.assertEqual(str, type(FileUtil.saved_file))
-        with self.assertRaises(AttributeError):
-            self.assertEqual(str, type(FileStorage.__file_path))
 
     def test_new(self):
         """

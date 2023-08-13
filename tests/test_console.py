@@ -2487,5 +2487,6 @@ class Test_destroy(unittest.TestCase):
             self.assertFalse(HBNBCommand().onecmd(command))
             self.assertNotIn(obj, storage.all())
 
+
 if __name__ == "__main__":
     unittest.main()

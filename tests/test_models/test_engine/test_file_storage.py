@@ -309,6 +309,7 @@ class TestFileStorage(unittest.TestCase):
         storage.new(obj6)
         storage.save()
         storage.reload()
+        obj = FileStorage.__objects
         objs = storage.all()
         self.assertIn("User." + obj1.id, objs)
         self.assertIn("State." + obj2.id, objs)

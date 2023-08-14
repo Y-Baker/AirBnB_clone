@@ -120,6 +120,36 @@ class TestFileStorage(unittest.TestCase):
             dict1 = json.load(fp)
             self.assertIn(self.base1.to_dict(), dict1.values())
 
+    def test_reload_fun(self):
+        """
+        test method for reload method in filestorage class
+        to check it reloads in the file or not
+        """
+        objs_before = storage.all().copy()
+        storage.new(User())
+        storage.save()
+        storage.__objects = {}
+        storage.reload()
+        objs_after = storage.all()
+        self.assertNotEqual(len(objs_before), len(objs_after))
+
+    def test_save_fun(self):
+        """
+        test method for save method in filestorage class
+        to check it saves in the file or not
+        """
+        storage.new(self.base1)
+        storage.save()
+        before_update = self.base1.updated_at
+        created_at = self.base1.created_at
+        self.base1.save()
+        key = f"BaseModel.{self.base1.id}"
+        with open(FileUtil.saved_file) as f:
+            dict_re = json.load(f)
+            new_obj = BaseModel(**dict_re[key])
+            self.assertEqual(created_at, new_obj.created_at)
+            self.assertNotEqual(before_update, new_obj.updated_at)
+
     def test_reload(self):
         """
         test method for reload method in filestorage class

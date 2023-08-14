@@ -266,7 +266,7 @@ def list_string_to_dict(data):
     for i in range(0, len(data), 2):
         key = data[i].rstrip(":").strip("{").strip("}")
         value = data[i + 1].strip("{").strip("}")
-        if((key == "")):
+        if (key == ""):
             print("** attribute name missing **")
             return None
 

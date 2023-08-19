@@ -2237,6 +2237,7 @@ class Test_destroy(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("destroy"))
             self.assertEqual(correct, f.getvalue().strip())
+        correct = "*** Unknown syntax: .destroy()"
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd(".destroy()"))
             self.assertEqual(correct, f.getvalue().strip())
@@ -2249,6 +2250,7 @@ class Test_destroy(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("destroy MyModel"))
             self.assertEqual(correct, f.getvalue().strip())
+        correct = "*** Unknown syntax: MyModel.destroy()"
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertFalse(HBNBCommand().onecmd("MyModel.destroy()"))
             self.assertEqual(correct, f.getvalue().strip())

@@ -1,0 +1,26 @@
+.places h1 {
+    font-size: 30px;
+    font-weight: bold;
+    padding-top: 5px;
+    padding-left: 20px;
+    width: 100%;
+}
+
+article {
+    width: 390px;
+    padding: 20px;
+    margin: 20px;
+    border: 2px solid #FF5A5F;
+    border-radius: 4px;
+    display: inline-block;
+}
+
+article h2 {
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.filters:hover ~ .places {
+    margin-top: 300px;
+}

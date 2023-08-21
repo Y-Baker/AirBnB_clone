@@ -54,14 +54,14 @@
 .filters .amenities:hover .popover {
     display: block;
 }
-.locations ul {
+.filters .locations ul {
     padding: 6px 0 6px 0;
 }
 
-.locations li {
+.filters .locations li {
     margin: 0 auto 12px 26px;
 }
-.amenities li {
+.filters .amenities li {
     margin: 12px auto 12px 10px;
 }
 

@@ -1,0 +1,14 @@
+header {
+    height: 70px;
+    width: 100%;
+    background-color:white;
+    border-bottom: 1px solid #CCCCCC;
+    display: flex;
+    align-items: center;
+}
+.logo {
+    width: 142px;
+    height: 60px;
+    background-image: url("../images/hbnb_Project.png");
+    margin-left: 20px;
+}
